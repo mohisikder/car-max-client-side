@@ -1,0 +1,12 @@
+.bg-products{
+   background: #F6F5F5;
+   height: 100%;
+   width: 100%;
+}
+.card{
+   border: .5px solid #ecebeb;
+   transition: all 0.5s ease-out;
+}
+.card:hover{
+   box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+}

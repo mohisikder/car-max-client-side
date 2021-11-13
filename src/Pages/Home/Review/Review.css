@@ -1,0 +1,25 @@
+.rating-box {
+   width: 130px;
+   height: 130px;
+   margin-right: auto;
+   margin-left: auto;
+   background-color: #FBC02D;
+   color: #fff
+}
+#button-addon1 {
+   color: #ffc371;
+ }
+ 
+ i {
+   color: #ffc371;
+ }
+ 
+ .form-control::placeholder {
+   font-size: 0.95rem;
+   color: #aaa;
+   font-style: italic;
+ }
+ 
+ .form-control.shadow-0:focus {
+   box-shadow: none;
+ }
