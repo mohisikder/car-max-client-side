@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Col, Container, Row, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Explore = () => {
+   const [products, setProducts] = useState([])
+
+   useEffect(()=>{
+      fetch(`https://tranquil-brushlands-41625.herokuapp.com/products`)
+      .then(res=>res.json())
+      .then(data=>setProducts(data))
+   },[])
    return (
       <>
          <div className="bg-products">
@@ -9,16 +17,17 @@ const Explore = () => {
                <h1 className="text-center">Explore Products</h1>
                <hr className="w-25 m-auto text-center" />
                <Row xs={1} md={3} className="g-4 mt-5">
-                  {Array.from({ length: 12 }).map((_, idx) => (
+                  {products.map((product, index) => (
                      <Col>
-                        <Card className="rounded">
-                        <Card.Img variant="top" className="w-50 m-auto" src={`https://i.ibb.co/wSyvgwC/4-bmw-png-image-download.png`} />
+                        <Card className="rounded h-100">
+                        <Card.Img variant="top" className="w-50 m-auto pt-3" src={product?.imgUrl} />
                         <Card.Body className="text-left">
-                           <Card.Title>Hyundai i30</Card.Title>
-                           <Card.Text>
-                           Hyundai’s warmed-over small sedan brings space aplenty, with an enticing sporty bent
-                           </Card.Text>
-                           <Button variant="danger">Buy Now</Button>
+                           <Card.Title>{product?.name}</Card.Title>
+                           <Card.Text>{product?.description}</Card.Text>
+                           <Card.Text>$ {product?.price}</Card.Text>
+                           <Link to={`/productdetails`}>
+                              <Button variant="danger">Buy Now</Button>
+                           </Link>
                         </Card.Body>
                         </Card>
                      </Col>

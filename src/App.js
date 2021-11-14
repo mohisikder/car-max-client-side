@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import './App.css';
 import AuthProvider from './Context/AuthProvider/AuthProvider';
 import About from './Pages/About/About';
+import AddProduct from './Pages/Dashboard/Admin/AddProduct/AddProduct';
+import ManageProducts from './Pages/Dashboard/Admin/ManageProducts/ManageProducts';
 import Dashboard from './Pages/Dashboard/Dashboard/Dashboard';
 import Payment from './Pages/Dashboard/Payment/Payment';
 import Explore from './Pages/Explore/Explore';
@@ -32,7 +34,7 @@ function App() {
             <Route exact path="/explore">
               <Explore/>
             </Route>
-            <PrivateRoute exact path="/product">
+            <PrivateRoute exact path="/productdetails/:productId">
               <ProductDetails/>
             </PrivateRoute>
             <PrivateRoute exact path="/dashboard">

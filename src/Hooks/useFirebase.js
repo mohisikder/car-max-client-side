@@ -20,6 +20,8 @@ const useFirebase=()=>{
          .then(result=>{
             const newUser = {email, displayName: name}
             setUser(newUser)
+            // Save user data into database
+            saveUser(email, name, 'POST');
             // send name to firebase after creation
             updateProfile(auth.currentUser, {
                displayName: name
@@ -73,13 +75,28 @@ useEffect( () =>{
     
 }
 
+   // Save User data
+   const saveUser = (email, displayName, method) =>{
+      const user = {email, displayName}
+
+      fetch(`https://tranquil-brushlands-41625.herokuapp.com/users`,{
+         method: method,
+         headers:{
+            'content-type':'application/json'
+         },
+         body: JSON.stringify(user)
+      })
+      .then()
+   }
+
    return{
       user,
       handleRegister,
       logout,
       loginUser,
       isLoading,
-      error
+      error,
+      saveUser
 
    }
 }

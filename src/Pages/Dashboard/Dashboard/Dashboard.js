@@ -1,24 +1,47 @@
 import React from 'react';
 import { Col, Container, Nav, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {
+   BrowserRouter as Router,
+   Switch,
+   Route,
+   Link,
+   useParams,
+   useRouteMatch,
+   NavLink
+ } from "react-router-dom";
+import DashboardHome from './DashboardHome/DashboardHome';
+import MyOrders from '../MyOrders/MyOrders';
+import AddProduct from '../Admin/AddProduct/AddProduct';
 
 const Dashboard = () => {
+   let { path, url } = useRouteMatch();
    return (
       <>
          <Container className="py-5">
             <Row>
-               <Col xs={12} md={4} style={{backgroundColor:"#fefefe", height:"100%"}}>
-                  <h1>Dashboard</h1>
+               <Col xs={12} md={4} style={{backgroundColor:"#EFEFEF", height:"100vh", width:"20%", padding:"15px 20px"}}>
+                  <h3>Dashboard</h3>
                   <div>
-                  <Nav defaultActiveKey="/dashboard" className="flex-column">
-                     <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
-                     <Nav.Link as={Link} to="/payment">Payment</Nav.Link>
-                     <Nav.Link as={Link} to="/myorders">My Orders</Nav.Link>
-                  </Nav>
+                     <Nav>
+                        <NavLink as={Link} to={`${url}`}>Dashboard</NavLink>
+                        <NavLink as={Link} to={`${url}/myorders`}>My Orders</NavLink>
+                        <NavLink as={Link} to={`${url}/addproduct`}>Add Product</NavLink>
+                        <NavLink as={Link} to={`${url}/manageproducts`}>Manage Products</NavLink>
+                     </Nav>
                   </div>
                </Col>
                <Col xs={12} md={8}>
-                  <h1>Dashboard Content Here</h1>
+               <Switch>
+                     <Route exact path={path}>
+                        <DashboardHome/>
+                     </Route>
+                     <Route path={`${path}/myorders`}>
+                        <MyOrders/>
+                     </Route>
+                     <Route path={`${path}/addproduct`}>
+                        <AddProduct/>
+                     </Route>
+                  </Switch>
                </Col>
             </Row>
          </Container>
