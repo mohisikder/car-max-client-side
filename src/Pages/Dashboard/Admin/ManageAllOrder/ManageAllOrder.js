@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row, Table, Button } from 'react-bootstrap';
-import useAuth from '../../../Hooks/useAuth';
 
-const MyOrders = () => {
-   const [myOrders, setMyOrders] = useState([])
+const ManageAllOrder = () => {
+   const [orders, setOrders] = useState([])
    const [control, setControl] =useState(false)
-   const {user} = useAuth()
 
    useEffect(()=>{
-      fetch(`https://tranquil-brushlands-41625.herokuapp.com/orders?email=${user?.email}`)
+      fetch(`https://tranquil-brushlands-41625.herokuapp.com/orders`)
       .then(res=>res.json())
-      .then(data=>setMyOrders(data))
+      .then(data=>setOrders(data))
    },[control])
 
    // Delete
@@ -27,13 +25,12 @@ const MyOrders = () => {
       alert('Are you sure!!!')
       
    }
-   
    return (
       <>
          <Container>
             <Row>
-               <Col>
-                  <h4 className="text-center">My Orders : {myOrders?.length}</h4>
+            <Col>
+                  <h4 className="text-center">Manage All Orders : {orders?.length}</h4>
                   <Table striped bordered hover>
                      <thead>
                         <tr>
@@ -47,10 +44,10 @@ const MyOrders = () => {
                         </tr>
                      </thead>
                      {
-                        myOrders?.map((pd,index)=><tbody>
+                        orders?.map((pd,index)=><tbody>
                         <tr>
                            <td>{index}</td>
-                           <td>{pd?.name}</td>
+                           <td>{pd?.productName}</td>
                            <td>{pd?.description}</td>
                            <td>{pd?.price}</td>
                            <td><img style={{width:"50px"}} src={pd?.imgUrl} /></td>
@@ -69,4 +66,4 @@ const MyOrders = () => {
    );
 };
 
-export default MyOrders;
+export default ManageAllOrder;

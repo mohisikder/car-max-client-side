@@ -3,12 +3,28 @@ import { Col, Container, Row, Table, Button } from 'react-bootstrap';
 
 const ManageProducts = () => {
    const [manageProducts, setManageProducts] = useState([])
+   const [control, setControl] =useState(false)
 
    useEffect(()=>{
       fetch(`https://tranquil-brushlands-41625.herokuapp.com/products`)
       .then(res=>res.json())
       .then(data=>setManageProducts(data))
    },[])
+
+   // Delete
+   const handleDelete = id =>{
+      fetch(`https://tranquil-brushlands-41625.herokuapp.com/delete/${id}`,{
+         method:'DELETE'
+      })
+      .then(res=>res.json())
+      .then(data=>{
+         if(data.deletedCount){
+            setControl(!control)
+         }
+      })
+      alert('Are you sure!!!')
+      
+   }
    return (
       <>
          <Container className="py-5">
@@ -29,13 +45,14 @@ const ManageProducts = () => {
                      {
                         manageProducts?.map((pd,index)=><tbody>
                         <tr>
-                           <td>1</td>
-                           <td>Mark</td>
-                           <td>Otto</td>
-                           <td>@mdo</td>
-                           <td>@mdo</td>
+                           <td>{index}</td>
+                           <td>{pd?.name}</td>
+                           <td>{pd?.description}</td>
+                           <td>{pd?.price}</td>
+                           <td><img style={{width:"50px"}} src={pd?.imgUrl} /></td>
+                           <td>{pd?.status}</td>
                            <td>
-                              <Button>Remove</Button>
+                              <Button onClick={()=>handleDelete(pd?._id)} variant="danger">Remove</Button>
                            </td>
                         </tr>
                      </tbody>)

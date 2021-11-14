@@ -1,55 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Container, Row, Button, Form } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import useAuth from '../../Hooks/useAuth';
 import { useParams } from "react-router";
+import { useForm } from "react-hook-form";
 
 const ProductDetails = () => {
-   const [products, setProducts] = useState([])
-   const [singleProducts, setSingleProducts] = useState([])
-   const {user, saveUser} = useAuth()
+   const [products, setProducts] = useState({})
+   const {user} = useAuth()
    const {productId} = useParams()
-   const initialInfo ={name: user?.displayName, email: user?.email, phone: '', city: '', address: ''}
-   const [orderInfo, setOrderInfo] = useState(initialInfo)
-   
+
+   const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm();
+
+    const onSubmit = (data) => {
+      data.email = user?.email;
+      fetch("https://tranquil-brushlands-41625.herokuapp.com/addorder", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+      //   .then((result) => console.log(result));
+        alert('Order Successfully')
+    };
+
    useEffect(()=>{
-      fetch(`https://tranquil-brushlands-41625.herokuapp.com/products`)
+      fetch(`https://tranquil-brushlands-41625.herokuapp.com/singleProduct/${productId}`)
       .then(res=>res.json())
       .then(data=>setProducts(data))
    },[])
-
-   useEffect(()=>{
-      const foundProduct = products.find(
-         (product)=>(product._id == productId))
-         setSingleProducts(foundProduct)
-   },[products])
-
-   const handleOnBlur = e => {
-      const field = e.target.name;
-      const value = e.target.value;
-      const newInfo = { ...orderInfo };
-      newInfo[field] = value;
-      setOrderInfo(newInfo);
-  }
-
-   const handleOrderSubmit = (e) =>{
-      const order = {
-         ...orderInfo,
-      }
-      fetch(`https://tranquil-brushlands-41625.herokuapp.com/addorder`,{
-         method: 'PUT',
-         headers:{'content-type':'application/json'},
-         body:JSON.stringify(order)
-      })
-      .then(res=> res.json())
-      .then(result=>{
-         saveUser(order, 'PUT')
-         if(result.insertedId){
-            e.reset()
-         }
-      })
-      e.preventDefault()
-   }
 
    return (
       <>
@@ -59,11 +41,11 @@ const ProductDetails = () => {
                   <Row className="g-4 d-flex justify-content-center">
                      <Col>
                         <Card className="h-100 w-100 shadow">
-                        <Card.Title className="p-5 text-center">{singleProducts?.name}</Card.Title>
-                        <Card.Img variant="top" className="h-50" src={singleProducts?.imgUrl} />
+                        <Card.Title className="p-5 text-center">{products?.name}</Card.Title>
+                        <Card.Img variant="top" className="h-50" src={products?.imgUrl} />
                         <Card.Body>
-                           <Card.Text className="fw-bold display-5">$ {singleProducts?.price}</Card.Text>
-                           <Card.Text>{singleProducts?.description}</Card.Text>
+                           <Card.Text className="fw-bold display-5">$ {products?.price}</Card.Text>
+                           <Card.Text>{products?.description}</Card.Text>
                         </Card.Body>
                         </Card>
                      </Col>
@@ -73,27 +55,79 @@ const ProductDetails = () => {
                   <Card style={{height:"100%", width:"100%"}}  className="text-center">
                      <Card.Header>Check Out</Card.Header>
                         <Card.Body>
-                           <Card.Title>Special title treatment</Card.Title>
                               <div>
-                                 <Form onSubmit={handleOrderSubmit}>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                       <Form.Control onBlur={handleOnBlur}  name="name" type="text" defaultValue={user?.displayName}  />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                       <Form.Control onBlur={handleOnBlur} name="email" type="email" defaultValue={user?.email} />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                       <Form.Control onBlur={handleOnBlur} name="phone" type="text" placeholder="Phone" />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                       <Form.Control onBlur={handleOnBlur} name="city" type="text" placeholder="City" />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                       <Form.Control onBlur={handleOnBlur} name="address" type="text" placeholder="Address" />
-                                    </Form.Group>
-                                 </Form>
+                              <form onSubmit={handleSubmit(onSubmit)}>
+                                 <input
+                                    {...register("name")}
+                                    placeholder="Name"
+                                    defaultValue={user?.displayName}
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+                                 <input
+                                    {...register("email")}
+                                    placeholder="Email"
+                                    defaultValue={user?.email}
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+                                 <input
+                                    {...register("phone")}
+                                    placeholder="Phone Number"
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+                                 <input
+                                    {...register("city")}
+                                    placeholder="City"
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+                                 <input
+                                    {...register("address")}
+                                    placeholder="Address"
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+                                 <input
+                                    {...register("productName")}
+                                    placeholder="Product Name"
+                                    defaultValue={products?.name}
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+
+                                 <input
+                                    {...register("description")}
+                                    placeholder="Description"
+                                    defaultValue={products?.description}
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+
+                                 <input
+                                    {...register("price", { required: true })}
+                                    placeholder="Price"
+                                    defaultValue={products?.price}
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+
+                                 <input
+                                    {...register("imgUrl", { required: true })}
+                                    placeholder="Image Link"
+                                    defaultValue={products?.imgUrl}
+                                    className="p-2 m-2 w-100 input-field"
+                                 />
+
+                                 <select {...register("status")} className="p-2 m-2 w-100">
+                                    <option value="pending">Pending</option>
+                                    <option value="delivery">Delivery</option>
+                                    <option value="done">Done</option>
+                                 </select>
+                                 <br />
+
+                                 {errors.exampleRequired && <span>This field is required</span>}
+
+                                 <input
+                                    type="submit"
+                                    value="Order now"
+                                    className="btn btn-danger w-50"
+                                 />
+                                 </form>
                               </div>
-                           <NavLink to="/payment"><Button variant="danger" type="submit">Place Order</Button></NavLink>
                         </Card.Body>
                   </Card>
                </Col>

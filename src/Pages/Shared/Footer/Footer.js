@@ -15,7 +15,7 @@ const Footer = () => {
                         <p>Follow us____:</p>
                         <div className="fs-3">
                            <i className="fab fa-facebook-square"></i>
-                           <i className="ms-3 fab fa-google-plus-square"></i>
+                           <i className="ms-3 fab fa-google-plus"></i>
                            <i className="ms-3 fab fa-linkedin"></i>
                         </div>
                      </div>
@@ -26,6 +26,7 @@ const Footer = () => {
                         <NavLink as={Link} className="text-white" to="/home">Home</NavLink>
                         <NavLink as={Link} className="text-white" to="/about">About Us</NavLink>
                         <NavLink as={Link} className="text-white" to="/products">Products</NavLink>
+                        <NavLink as={Link} className="text-white" to="/explore">Explore</NavLink>
                         <NavLink as={Link} className="text-white" to="/reviews">Reviews</NavLink>
                      </Nav>
                   </Col>

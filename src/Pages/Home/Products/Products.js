@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './Products.css';
 import { Card, Col, Container, Row, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import useAuth from '../../../Hooks/useAuth';
 
 const Products = () => {
    const [products, setProducts] = useState([])
-   const {user} = useAuth()
 
    useEffect(()=>{
       fetch(`https://tranquil-brushlands-41625.herokuapp.com/products`)
@@ -14,26 +12,7 @@ const Products = () => {
       .then(data=>setProducts(data))
    },[])
 
-   // Handle Add to Cart
-const handleAddToCart = (index) =>{
-   const data = products[index]
-   data.email = user?.email
-   data.name = user?.displayName
-   data.status = 'pending'
-   
-   fetch(`https://tranquil-brushlands-41625.herokuapp.com/addorder`,{
-      method: 'POST',
-      headers:{'content-type':'application/json'},
-      body:JSON.stringify(data)
-   })
-   .then(res=> res.json())
-   .then(result=>{
-      if(result.insertedId){
-         alert('Order Added Successfully')
-         
-      }
-   })
-}
+
    return (
       <>
          <div className="bg-products">
@@ -50,7 +29,7 @@ const handleAddToCart = (index) =>{
                            <Card.Text>{product?.description}</Card.Text>
                            <Card.Text>$ {product?.price}</Card.Text>
                            <Link to={`/productdetails/${product?._id}`}>
-                              <Button variant="danger" onClick={()=>handleAddToCart(index)}>Buy Now</Button>
+                              <Button variant="danger">Buy Now</Button>
                            </Link>
                         </Card.Body>
                         </Card>

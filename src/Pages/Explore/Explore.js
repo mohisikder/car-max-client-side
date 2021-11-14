@@ -25,7 +25,7 @@ const Explore = () => {
                            <Card.Title>{product?.name}</Card.Title>
                            <Card.Text>{product?.description}</Card.Text>
                            <Card.Text>$ {product?.price}</Card.Text>
-                           <Link to={`/productdetails`}>
+                           <Link to={`/productdetails/${product?._id}`}>
                               <Button variant="danger">Buy Now</Button>
                            </Link>
                         </Card.Body>
