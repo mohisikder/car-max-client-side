@@ -50,7 +50,7 @@ const MyOrders = () => {
                         myOrders?.map((pd,index)=><tbody>
                         <tr>
                            <td>{index}</td>
-                           <td>{pd?.name}</td>
+                           <td>{pd?.productName}</td>
                            <td>{pd?.description}</td>
                            <td>{pd?.price}</td>
                            <td><img style={{width:"50px"}} src={pd?.imgUrl} /></td>
