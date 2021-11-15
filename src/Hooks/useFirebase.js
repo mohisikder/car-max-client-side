@@ -9,6 +9,7 @@ const useFirebase=()=>{
    const [user, setUser] = useState({})
    const [isLoading, setIsLoading] =useState(true)
    const [error, setError] = useState('')
+   const [admin, setAdmin] = useState(false);
 
 
    const auth = getAuth();
@@ -64,6 +65,12 @@ useEffect( () =>{
     return () => unsubscribe;
 }, [])
 
+useEffect(() => {
+   fetch(`https://tranquil-brushlands-41625.herokuapp.com/users/${user?.email}`)
+       .then(res => res.json())
+       .then(data => setAdmin(data.admin))
+}, [user?.email])
+
  const logout=()=>{
     setIsLoading(true)
    signOut(auth).then(() => {
@@ -96,7 +103,8 @@ useEffect( () =>{
       loginUser,
       isLoading,
       error,
-      saveUser
+      saveUser,
+      admin
 
    }
 }

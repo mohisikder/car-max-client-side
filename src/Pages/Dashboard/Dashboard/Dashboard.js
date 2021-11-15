@@ -10,21 +10,9 @@ import Review from '../../Home/Review/Review';
 import Payment from '../Payment/Payment';
 
 const Dashboard = () => {
-   const { user, logout} = useAuth();
+   const { user, logout, admin} = useAuth();
    const [control, setControl] = useState('addproduct')
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-   fetch(`https://tranquil-brushlands-41625.herokuapp.com/checkAdmin/${user?.email}`)
-     .then((res) => res.json())
-     .then((data) => {
-       if (data[0]?.role === "admin") {
-         setIsAdmin(true);
-       } else {
-         setIsAdmin(false);
-       }
-     });
- }, [user?.email]);
    return (
       <>
          <div className="py-5 container">
@@ -46,18 +34,18 @@ const Dashboard = () => {
                      </div>
                      <hr />
                      <div>
-                        <div className="mb-2" onClick={()=>setControl('addproduct')}>
+                        { admin && <div className="mb-2" onClick={()=>setControl('addproduct')}>
                            Add Product
-                        </div>
-                        <div className="mb-2" onClick={()=>setControl('manageallorder')}>
+                        </div>}
+                        {admin && <div className="mb-2" onClick={()=>setControl('manageallorder')}>
                            Manage All Order
-                        </div>
-                        <div className="mb-2" onClick={()=>setControl('manageproducts')}>
+                        </div>}
+                        {admin && <div className="mb-2" onClick={()=>setControl('manageproducts')}>
                            Manage Products
-                        </div>
-                        <div className="mb-2" onClick={()=>setControl('makeadmin')}>
+                        </div>}
+                        {admin && <div className="mb-2" onClick={()=>setControl('makeadmin')}>
                            Make An Admin
-                        </div>
+                        </div>}
                      </div>
                      <div className="mt-5">
                         {user?.email && <Button onClick={logout} variant="danger">Logout</Button>}

@@ -1,41 +1,51 @@
-import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 const MakeAdmin = () => {
-   const {
-      register,
-      handleSubmit,
-      watch,
-      formState: { errors },
-    } = useForm();
+   const [email, setEmail] = useState('');
+   const [success, setSuccess] = useState(false);
 
-    const onSubmit = (data) => {
-       console.log(data);
-    }
+   const handleOnBlur = e => {
+       setEmail(e.target.value);
+   }
+   const handleAdminSubmit = e => {
+       const user = { email };
+       fetch(`https://tranquil-brushlands-41625.herokuapp.com/users/admin`, {
+           method: 'PUT',
+           headers: {
+               'content-type': 'application/json'
+           },
+           body: JSON.stringify(user)
+       })
+           .then(res => res.json())
+           .then(data => {
+               if (data.modifiedCount) {
+                   console.log(data);
+                   setSuccess(true);
+               }
+           })
+
+       e.preventDefault()
+   }
    return (
       <>
          <Container className="py-5">
                   <h5>Make An Admin</h5>
             <Row>
                <Col xs={12} md={6}>
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleAdminSubmit}>
                      <input
-                        {...register("email")}
+                        type="email"
+                        onBlur={handleOnBlur}
                         placeholder="Email"
-                        className="p-2 m-2 w-100 input-field"
-                     />
-                     <input
-                        {...register("role")}
-                        placeholder="Role"
-                        className="p-2 m-2 w-100 input-field"
                      />
                      <input
                         type="submit"
-                        value="Make An Admin"
+                        value="Make Admin"
                         className="btn btn-danger w-50"
                      />
                   </form>
+                  {success && <Alert variant="success">Made Admin successfully!</Alert>}
                </Col>
             </Row>
          </Container>  
