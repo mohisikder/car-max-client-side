@@ -34,6 +34,9 @@ const Dashboard = () => {
                      </div>
                      <hr />
                      <div>
+                        { admin && <div className="mb-2" onClick={()=>setControl('myorders')}>
+                           My Orders
+                        </div>}
                         { admin && <div className="mb-2" onClick={()=>setControl('addproduct')}>
                            Add Product
                         </div>}
